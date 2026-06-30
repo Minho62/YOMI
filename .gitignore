@@ -1,0 +1,14 @@
+build/
+devel/
+install/
+log/
+.catkin_tools/
+__pycache__/
+*.pyc
+_CPack_Packages/
+*.zip
+*.tar.gz
+*.bag
+*.mp4
+*.avi
+*.stl

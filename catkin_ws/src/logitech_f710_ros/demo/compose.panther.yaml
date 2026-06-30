@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  ros-master:
+    image: ros:noetic-ros-core
+    restart: unless-stopped
+    command: stdbuf -o L roscore
+
+  logitech-f710-joy-ros:
+    image: husarion/logitech-f710:noetic
+    restart: unless-stopped
+    tty: true
+    devices:
+      - /dev/input/js0
+    environment:
+      - ROS_MASTER_URI=http://ros-master:11311
+    command: >
+      roslaunch --wait 
+      logitech_f710_joy_ros joy_teleop.launch
+
+  # ROS Noetic
+  panther_driver:
+    image: husarion/panther-driver
+    restart: unless-stopped
+    tty: true  
+    environment:
+      - ROS_MASTER_URI=http://ros-master:11311
+    command: roslaunch panther_driver driver.launch
+
+  # ROS Noetic
+  velocity_manager:
+    image: husarion/velocity-manager:noetic-latest
+    restart: unless-stopped
+    tty: true   
+    environment:
+      - ROS_MASTER_URI=http://ros-master:11311
+    command: rosrun velocity_manager velocity_manager_node
+
+
+
+

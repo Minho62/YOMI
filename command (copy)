@@ -1,0 +1,58 @@
+export OPENCR_PORT=/dev/opencr
+export OPENCR_MODEL=burger_noetic  
+
+./update.sh $OPENCR_PORT $OPENCR_MODEL.opencr  
+
+roscore
+
+export TURTLEBOT3_MODEL=waffle
+
+roslaunch turtlebot3_bringup turtlebot3_robot.launch
+
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+
+
+roslaunch turtlebot3_slam turtlebot3_slam.launch
+
+rosrun map_server map_saver -f ~/map
+
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/mapgodd.yaml
+
+
+
+
+//////////////////////
+roscore
+
+rosrun rosserial_python serial_node.py _port:=/dev/arduino _baud:=57600
+
+rosrun yomi yomi_publisher9.py
+
+rosrun yomi yomi_publisher_test.py
+
+rosrun yomi main_core.py
+//////////////////////
+
+export TURTLEBOT3_MODEL=waffle
+
+sudo chmod 777 /dev/tty
+
+roslaunch ydlidar_ros_driver G2.launch
+
+roslaunch turtlebot3_manipulation_moveit_config move_group.launch
+
+roslaunch turtlebot3_manipulation_moveit_config moveit_rviz.launch
+
+roslaunch turtlebot3_manipulation_gui turtlebot3_manipulation_gui.launch
+
+
+
+
+sudo chmod 777 /dev/input/js0
+roslaunch logitech_f710_joy_ros joy_teleop.launch
+
+cd /Downloads/yolov5
+
+python3 detect.py --weights yolov5m.pt --device 0 --source 0
+
+rosrun yomi goal.py
